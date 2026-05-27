@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jen and JJ Adventure Hub</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;700;900&display=swap');
+
+:root{
+  --pink:#ff4fb8;
+  --purple:#7c5cff;
+  --blue:#00b9ff;
+  --gold:#ffd447;
+  --green:#00c781;
+  --orange:#ff8a3d;
+  --ink:#251f3d;
+  --soft:#675b82;
+  --card:#fff;
+  --shadow:0 18px 40px rgba(124,92,255,.18);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Nunito,Arial,sans-serif;
+  color:var(--ink);
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 10% 15%, rgba(255,212,71,.35), transparent 25%),
+    radial-gradient(circle at 85% 10%, rgba(0,185,255,.30), transparent 28%),
+    radial-gradient(circle at 80% 85%, rgba(255,79,184,.30), transparent 25%),
+    linear-gradient(135deg,#fff7fc 0%,#eef8ff 45%,#f5edff 100%);
+}
+header{text-align:center;padding:28px 16px 12px}
+h1,h2,h3,button,.link-button{
+  font-family:Bangers,Impact,fantasy;
+  letter-spacing:1.5px;
+}
+h1{
+  margin:0;
+  font-size:clamp(2.8rem,7vw,5.8rem);
+  color:var(--pink);
+  text-shadow:3px 3px 0 white, 6px 6px 0 rgba(124,92,255,.2);
+}
+header p{color:var(--soft);font-size:1.1rem;max-width:850px;margin:8px auto}
+
+.container{width:min(1180px,94vw);margin:0 auto 45px}
+.card{
+  background:rgba(255,255,255,.94);
+  border:2px solid rgba(255,79,184,.16);
+  border-radius:26px;
+  box-shadow:var(--shadow);
+  padding:22px;
+  margin-top:22px;
+}
+.card h2{margin:0 0 12px;color:var(--purple);font-size:2rem}
+.top-grid,.two-col,.dashboard,.mega-grid,.castle-grid{
+  display:grid;
+  gap:18px;
+}
+.top-grid{grid-template-columns:1.2fr .8fr}
+.two-col{grid-template-columns:1fr 1fr}
+.dashboard{grid-template-columns:1fr 1.3fr 1fr}
+button,.link-button{
+  border:0;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:white;
+  border-radius:999px;
+  padding:11px 17px;
+  text-decoration:none;
+  display:inline-block;
+  cursor:pointer;
+  font-size:1rem;
+  box-shadow:0 8px 18px rgba(255,79,184,.22);
+  margin:3px;
+}
+button.gold,.link-button.gold{background:linear-gradient(135deg,var(--gold),var(--orange));color:#2b2209}
+button.secondary,.link-button.secondary{background:linear-gradient(135deg,var(--green),#00e0c7)}
+button.locked{background:#ddd7e8;color:#776d8f;cursor:not-allowed}
+.hero-card{
+  margin-top:0;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:16px;
+  align-items:center;
+}
+.date-box{
+  min-width:150px;
+  background:#ffe2f4;
+  border-radius:20px;
+  padding:16px;
+  text-align:center;
+  color:var(--pink);
+  font-weight:900;
+}
+.date-box span{font-size:2.2rem;display:block}
+.schedule-item,.assignment-item,.resource-item{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid #eee;
+}
+.badge{
+  background:#ffe2f4;
+  color:var(--pink);
+  padding:6px 10px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:.8rem;
+}
+.kid-tabs{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.kid-tab{
+  flex:1;min-width:220px;background:white;border-radius:22px;padding:16px;
+  border:2px solid transparent;box-shadow:var(--shadow);cursor:pointer
+}
+.kid-tab.active{border-color:var(--pink)}
+.hidden{display:none!important}
+.subject{padding:12px;border-left:6px solid var(--pink);background:#fbf8ff;border-radius:16px;margin-bottom:8px}
+.points-box,.xp-panel,.daily-points-box{
+  margin:14px 0;padding:14px;border-radius:18px;text-align:center;
+  background:linear-gradient(135deg,#fff7df,#f6e8ff);
+}
+.points-score,.daily-points-score{font-size:1.8rem;color:var(--orange);font-weight:900;display:block}
+.progress-wrap,.xp-wrap{height:15px;background:#e8e2ff;border-radius:999px;overflow:hidden}
+.progress-bar,.xp-bar{height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--gold));transition:.3s}
+.level-badge{
+  display:inline-block;background:linear-gradient(135deg,var(--purple),var(--pink));
+  color:white;border-radius:999px;padding:8px 14px;font-weight:900
+}
+.castle-grid{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.castle-card{
+  background:linear-gradient(135deg,#fff,#fff1fb);
+  border:2px solid rgba(124,92,255,.16);
+  border-radius:24px;
+  padding:18px;
+  text-align:center;
+  box-shadow:0 12px 24px rgba(124,92,255,.12);
+}
+.castle-card .emoji{font-size:3rem;display:block}
+.castle-card h3{font-size:1.6rem;margin:8px 0;color:var(--pink)}
+.castle-status{font-weight:900;color:var(--purple);margin:8px 0}
+.castle-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:10px}
+.level-list{display:grid;gap:6px;margin-top:10px;text-align:left}
+.level-row{display:flex;justify-content:space-between;background:#fff;border-radius:12px;padding:8px;font-size:.85rem;font-weight:900;color:var(--soft)}
+.mega-grid{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.mega-card{background:linear-gradient(135deg,#fff,#fff1fb);border-radius:20px;padding:16px;border:2px solid rgba(124,92,255,.14)}
+textarea,input,select{
+  width:100%;border:1px solid #ddd;border-radius:14px;padding:12px;margin:6px 0 10px;font-size:1rem
+}
+textarea{min-height:90px}
+.proof-upload{margin-top:8px;display:block;width:100%;font-size:.9rem}
+.approval-card{
+  background:#fffdfb;border:2px dashed rgba(124,92,255,.28);
+  border-radius:18px;padding:14px;margin-top:12px
+}
+.approval-status{display:inline-block;margin-top:8px;padding:6px 10px;border-radius:999px;background:#ffe2f4;color:var(--pink);font-weight:900}
+.submission-link{display:block;margin-top:8px;word-break:break-word;color:var(--purple);font-weight:900}
+.streak-badge{
+  position:fixed;top:12px;right:12px;z-index:9999;
+  background:linear-gradient(135deg,#ff9f43,var(--pink));
+  color:white;border-radius:999px;padding:10px 16px;
+  box-shadow:0 10px 24px rgba(255,79,184,.28);
+  text-align:center;border:2px solid rgba(255,255,255,.35)
+}
+.streak-badge strong{display:block}
+.timer-panel{
+  position:fixed;left:14px;bottom:14px;z-index:9999;
+  background:linear-gradient(135deg,#fff8df,#ffe9f7);
+  border:2px solid rgba(255,79,184,.28);
+  border-radius:20px;padding:14px;box-shadow:0 10px 24px rgba(124,92,255,.22);
+  max-width:320px
+}
+.timer-panel strong{display:block;color:var(--pink)}
+.timer-panel span{display:block;color:var(--purple);font-weight:900;margin:6px 0}
+.dark-mode{background:linear-gradient(135deg,#151426,#251b45,#102f42)!important;color:white}
+.dark-mode .card,.dark-mode .castle-card,.dark-mode .mega-card{background:rgba(36,34,61,.96);color:white}
+@media(max-width:850px){.top-grid,.two-col,.dashboard,.hero-card{grid-template-columns:1fr}.streak-badge{position:static;margin:8px auto;width:max-content}}
+
+.notification-box{
+  margin:12px 0;
+  padding:12px 14px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#fff8df,#ffe9f7);
+  border:2px solid rgba(255,79,184,.22);
+  color:var(--purple);
+  font-weight:900;
+  text-align:center;
+  box-shadow:0 8px 18px rgba(124,92,255,.10);
+}
+
+
+.music-panel{
+  position:fixed;
+  right:12px;
+  bottom:12px;
+  z-index:9999;
+  background:linear-gradient(135deg,#f1ebff,#ffe9f7);
+  border:2px solid rgba(124,92,255,.22);
+  border-radius:20px;
+  padding:12px;
+  box-shadow:0 10px 24px rgba(124,92,255,.22);
+  max-width:280px;
+}
+.music-panel strong{
+  display:block;
+  color:var(--purple);
+  margin-bottom:6px;
+}
+.music-panel button{
+  padding:8px 11px;
+  font-size:.9rem;
+}
+
+
+.subject{
+  padding:16px !important;
+  margin-bottom:14px !important;
+  line-height:1.6 !important;
+}
+
+.subject strong{
+  display:block;
+  font-size:1.08rem;
+  margin-bottom:6px;
+}
+
+
+.toast{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:10000;
+  padding:14px 22px;
+  border-radius:18px;
+  font-weight:900;
+  color:white;
+  box-shadow:0 12px 28px rgba(0,0,0,.18);
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+}
+.toast.show{
+  opacity:1;
+}
+.toast.approved{
+  background:linear-gradient(135deg,#00c781,#00e0c7);
+}
+.toast.sentback{
+  background:linear-gradient(135deg,#ff8a3d,#ff4fb8);
+}
+
+</style>
+</head>
+
+<body>
+<div id="toast" class="toast">Notification</div>
+<div class="streak-badge" id="streakBadge"><strong>0 Day Streak</strong><span>Adventure Power</span></div>
+
+<div class="timer-panel hidden" id="questTimerPanel">
+  <strong id="questTimerTitle">Quest Timer</strong>
+  <span id="questTimerText">Time remaining</span>
+  <button onclick="finishTimedQuest()">Submit Lesson</button>
+  <button class="gold" onclick="doMoreQuest()">Do More +5 EXP</button>
+</div>
+
+<header>
+  <h1>Jen and JJ Adventure Hub</h1>
+  <p>Quests, castles, timers, approvals, proof uploads, streaks, rewards, and boss battles.</p>
+</header>
+
+
+<div class="music-panel">
+  <strong>Music</strong>
+  <button onclick="playTheme('adventure')">Adventure</button>
+  <button onclick="playTheme('victory')">Victory</button>
+  <button onclick="playTheme('boss')">Boss</button>
+  <button onclick="playTheme('calm')">Calm</button>
+  <button class="gold" onclick="stopTheme()">Stop</button>
+</div>
+
+<main class="container">
+
+<section class="top-grid">
+    <div class="card hero-card">
+      <div>
+        <h2>Today's Quest Board</h2>
+        <p>Choose Jen or JJ, complete quests, upload picture or video proof, and wait for approval before EXP counts.</p>
+        <button onclick="window.print()">Print Today</button>
+        <button class="secondary" onclick="resetChecks()">Reset Checkboxes</button>
+        <a class="link-button gold" href="https://www.khanacademy.org/math" target="_blank">Open Khan Academy</a>
+      </div>
+      <div class="date-box">
+        <small>Learning Day</small>
+        <span id="dayNumber">1</span>
+        <small id="todayDate"></small>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Family Rhythm</h2>
+      <div class="schedule-item"><span>Math</span><span>Math practice and challenge quests</span><span class="badge">Think</span></div>
+      <div class="schedule-item"><span>Read</span><span>Reading and language arts</span><span class="badge">Read</span></div>
+      <div class="schedule-item"><span>Science</span><span>Experiments and discoveries</span><span class="badge">Explore</span></div>
+      <div class="schedule-item"><span>Design</span><span>Creative building and projects</span><span class="badge">Create</span></div>
+    </div>
+  </section>
+
+
+  <section class="card" id="castles">
+    <h2>Subject Kingdoms</h2>
+    <p>Castles come right under the quests. Math Castle is open first. More castles unlock after EXP approval.</p>
+    <div class="castle-grid">
+      <div class="castle-card">
+        <span class="emoji">🏰</span><h3>Math Castle</h3>
+        <div class="castle-status" id="mathCastleStatus">Open at 0 EXP</div>
+        <div class="castle-actions">
+          <button id="enter-math" onclick="startCastleTimer('math')">Start Timer</button>
+          <a class="link-button" href="https://www.khanacademy.org/math" target="_blank">Open Khan</a>
+        </div>
+      </div>
+
+      <div class="castle-card">
+        <span class="emoji">📚</span><h3>Reading Castle</h3>
+        <div class="castle-status" id="readingCastleStatus">Locked at 500 EXP</div>
+        <div class="castle-actions">
+          <button id="enter-reading" class="locked" onclick="startCastleTimer('reading')">Locked</button>
+          <a class="link-button" href="https://www.getepic.com" target="_blank">Open Reading</a>
+        </div>
+      </div>
+
+      <div class="castle-card">
+        <span class="emoji">✍️</span><h3>Writing Castle</h3>
+        <div class="castle-status" id="writingCastleStatus">Locked at 1000 EXP</div>
+        <div class="castle-actions">
+          <button id="enter-writing" class="locked" onclick="startCastleTimer('writing')">Locked</button>
+          <a class="link-button" href="https://www.canva.com" target="_blank">Open Canva</a>
+        </div>
+      </div>
+
+      <div class="castle-card">
+        <span class="emoji">🔬</span><h3>Science Castle</h3>
+        <div class="castle-status" id="scienceCastleStatus">Locked at 1500 EXP</div>
+        <div class="castle-actions">
+          <button id="enter-science" class="locked" onclick="startCastleTimer('science')">Locked</button>
+          <a class="link-button" href="https://kids.nationalgeographic.com" target="_blank">Open Science</a>
+        </div>
+      </div>
+
+      <div class="castle-card">
+        <span class="emoji">🧩</span><h3>Puzzle Castle</h3>
+        <div class="castle-status" id="puzzleCastleStatus">Locked at 2000 EXP</div>
+        <div class="castle-actions">
+          <button id="enter-puzzle" class="locked" onclick="startCastleTimer('puzzle')">Locked</button>
+          <a class="link-button" href="https://ruwix.com/the-rubiks-cube/how-to-solve-the-rubiks-cube-beginners-method/" target="_blank">Open Cube</a>
+        </div>
+      </div>
+
+      <div class="castle-card">
+        <span class="emoji">🎨</span><h3>Design Castle</h3>
+        <div class="castle-status" id="designCastleStatus">Locked at 2500 EXP</div>
+        <div class="castle-actions">
+          <button id="enter-design" class="locked" onclick="startCastleTimer('design')">Locked</button>
+          <a class="link-button" href="https://www.canva.com" target="_blank">Open Design</a>
+        </div>
+      </div>
+
+      <div class="castle-card">
+        <span class="emoji">👑</span><h3>Final Castle</h3>
+        <div class="castle-status" id="finalCastleStatus">Locked at 3000 EXP</div>
+        <div class="castle-actions">
+          <button id="enter-final" class="locked" onclick="startCastleTimer('final')">Locked</button>
+          <button class="gold" onclick="showWeekendBoss()">Final Boss</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <!-- QUESTS FIRST -->
+  
+
+  <!-- CASTLES SECOND -->
+  
+
+  <section class="kid-tabs">
+    <div class="kid-tab active" onclick="switchKid('kid11')" id="tab-kid11" role="button"><h3>Jen's Dashboard</h3><p>Reading, writing, science, math, and creative quests.</p></div>
+    <div class="kid-tab" onclick="switchKid('kid8')" id="tab-kid8" role="button"><h3>JJ's Dashboard</h3><p>Math star, cube thinking, puzzles, science, and design.</p></div>
+  </section>
+
+  <section id="kid11" class="kid-panel">
+    <div class="dashboard">
+      <div class="card"><h2>Jen Subjects</h2>
+        <div class="subject"><strong>Advanced Math</strong>Khan Academy plus challenge problems above grade level</div>
+        <div class="subject"><strong>Graphic Novel Reading</strong>Reading log, vocabulary, character analysis, and Potterhead comparisons</div>
+        <div class="subject"><strong>Writing</strong>Paragraphs, book reviews, magical world building, and short essays</div>
+        <div class="subject"><strong>Science</strong>Water parks, swimming, motion, force, waves, and mini experiments</div>
+        <div class="subject"><strong>Social Studies</strong>Maps, culture, history, and real world connections</div>
+      </div>
+      <div class="card">
+        <h2>Jen Quests</h2>
+        <div class="assignment-item"><input type="checkbox" class="check kid11"><span><span class="dynamic-math">Complete 30 minutes of advanced Khan Academy math or one above level challenge</span></span><div><button onclick="submitQuest(event,'Jen','Math Castle Quest')">Submit Lesson</button><input type="file" accept="image/*,video/*" class="proof-upload" onchange="storeProof(event)"></div></div>
+        <div class="assignment-item"><input type="checkbox" class="check kid11"><span><span class="dynamic-reading">Read a graphic novel or chapter book for 25 minutes and write a 3 sentence summary</span></span><div><button onclick="submitQuest(event,'Jen','Reading Castle Quest')">Submit Lesson</button><input type="file" accept="image/*,video/*" class="proof-upload" onchange="storeProof(event)"></div></div>
+        <div class="assignment-item"><input type="checkbox" class="check kid11"><span>Write a Potterhead style paragraph: character, setting, conflict, or magical rule</span><div><button onclick="submitQuest(event,'Jen','Writing Castle Quest')">Submit Lesson</button><input type="file" accept="image/*,video/*" class="proof-upload" onchange="storeProof(event)"></div></div>
+        <div class="assignment-item"><input type="checkbox" class="check kid11"><span><span class="dynamic-science"><span class="dynamic-science">Explore the science of swimming, waves, water slides, or motion and record 3 facts</span></span></span><div><button onclick="submitQuest(event,'Jen','Science Castle Quest')">Submit Lesson</button><input type="file" accept="image/*,video/*" class="proof-upload" onchange="storeProof(event)"></div></div>
+        <div class="assignment-item"><input type="checkbox" class="check kid11"><span><span class="dynamic-design"><span class="dynamic-design">Complete one creative quest: design a water park, magical map, coaster, or castle concept</span></span></span><div><button onclick="submitQuest(event,'Jen','Design Castle Quest')">Submit Lesson</button><input type="file" accept="image/*,video/*" class="proof-upload" onchange="storeProof(event)"></div></div>
+        <div class="points-box"><strong>Daily Progress</strong><span class="points-score" id="points-kid11">0/5</span></div>
+        <div class="daily-points-box"><strong>Daily Quest Points</strong><span class="daily-points-score" id="dailyQuestPoints-kid11">0/25</span></div>
+        <div class="xp-panel"><span class="level-badge" id="level-kid11">Level 0</span><p id="xpText-kid11">0 / 50 EXP</p><div class="xp-wrap"><div class="xp-bar" id="xpBar-kid11"></div></div><p id="difficulty-kid11">Starter Quests</p></div><div class="notification-box" id="notify-kid11">Ready for your first quest!</div>
+        <p><strong>Progress</strong>: <span id="progressText-kid11">0%</span></p><div class="progress-wrap"><div class="progress-bar" id="progress-kid11"></div></div>
+      </div>
+      <div class="card"><h2>Jen Links</h2>
+        <div class="resource-item"><span>Math</span><a href="https://www.khanacademy.org/math" target="_blank">Khan Math</a><span class="badge">Free</span></div>
+        <div class="resource-item"><span>Read</span><a href="https://www.getepic.com" target="_blank">Epic Reading</a><span class="badge">Read</span></div>
+        <div class="resource-item"><span>Design</span><a href="https://www.canva.com" target="_blank">Canva</a><span class="badge">Create</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kid8" class="kid-panel hidden">
+    <div class="dashboard">
+      <div class="card"><h2>JJ Subjects</h2>
+        <div class="subject"><strong>Math Star</strong>Khan Academy and hard challenges</div>
+        <div class="subject"><strong>Cube Thinking</strong>Rubik's Cube and puzzles</div>
+        <div class="subject"><strong>Science</strong>Theme park physics</div>
+        <div class="subject"><strong>Design</strong>Rides, mazes, and builds</div>
+      </div>
+      <div class="card">
+        <h2>JJ Quests</h2>
+        <div class="assignment-item"><input type="checkbox" class="check kid8"><span>Khan math quest</span><div><button onclick="submitQuest(event,'Jah','Math Castle Quest')">Submit Lesson</button><input type="file" accept="image/*,video/*" class="proof-upload" onchange="storeProof(event)"></div></div>
+        <div class="assignment-item"><input type="checkbox" class="check kid8"><span>Cube or puzzle quest</span><div><button onclick="submitQuest(event,'Jah','Puzzle Castle Quest')">Submit Lesson</button><input type="file" accept="image/*,video/*" class="proof-upload" onchange="storeProof(event)"></div></div>
+        <div class="assignment-item"><input type="checkbox" class="check kid8"><span><span class="dynamic-reading">Reading quest</span></span><div><button onclick="submitQuest(event,'Jah','Reading Castle Quest')">Submit Lesson</button><input type="file" accept="image/*,video/*" class="proof-upload" onchange="storeProof(event)"></div></div>
+        <div class="assignment-item"><input type="checkbox" class="check kid8"><span><span class="dynamic-science"><span class="dynamic-science">Explore the science of swimming, waves, water slides, or motion and record 3 facts</span></span></span><div><button onclick="submitQuest(event,'Jah','Science Castle Quest')">Submit Lesson</button><input type="file" accept="image/*,video/*" class="proof-upload" onchange="storeProof(event)"></div></div>
+        <div class="assignment-item"><input type="checkbox" class="check kid8"><span><span class="dynamic-design"><span class="dynamic-design">Complete one creative quest: design a water park, magical map, coaster, or castle concept</span></span></span><div><button onclick="submitQuest(event,'Jah','Design Castle Quest')">Submit Lesson</button><input type="file" accept="image/*,video/*" class="proof-upload" onchange="storeProof(event)"></div></div>
+        <div class="points-box"><strong>Daily Progress</strong><span class="points-score" id="points-kid8">0/5</span></div>
+        <div class="daily-points-box"><strong>Daily Quest Points</strong><span class="daily-points-score" id="dailyQuestPoints-kid8">0/25</span></div>
+        <div class="xp-panel"><span class="level-badge" id="level-kid8">Level 0</span><p id="xpText-kid8">0 / 50 EXP</p><div class="xp-wrap"><div class="xp-bar" id="xpBar-kid8"></div></div><p id="difficulty-kid8">Starter Quests</p></div><div class="notification-box" id="notify-kid8">Ready for your first quest!</div>
+        <p><strong>Progress</strong>: <span id="progressText-kid8">0%</span></p><div class="progress-wrap"><div class="progress-bar" id="progress-kid8"></div></div>
+      </div>
+      <div class="card"><h2>JJ Links</h2>
+        <div class="resource-item"><span>Math</span><a href="https://www.khanacademy.org/math" target="_blank">Khan Math</a><span class="badge">Free</span></div>
+        <div class="resource-item"><span>Cube</span><a href="https://ruwix.com/the-rubiks-cube/how-to-solve-the-rubiks-cube-beginners-method/" target="_blank">Cube Solver</a><span class="badge">Puzzle</span></div>
+        <div class="resource-item"><span>Code</span><a href="https://code.org/learn" target="_blank">Code.org</a><span class="badge">Code</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Adventure Mega Pack</h2>
+    <div class="mega-grid">
+      <div class="mega-card"><h3>Rewards Shop</h3><select id="rewardChoice"><option>Extra screen time</option><option>Movie night</option><option>Swimming trip</option><option>Special dessert</option></select><button onclick="claimReward()">Request Reward</button></div>
+      <div class="mega-card"><h3>Sound Effects</h3><button onclick="playVictorySound()">Play Quest Sound</button></div>
+      <div class="mega-card"><h3>Dark Mode</h3><button onclick="toggleDarkMode()">Toggle Dark Mode</button></div>
+      <div class="mega-card"><h3>Weekend Boss</h3><p id="weekendBossText">Boss battles appear on weekends.</p><button onclick="showWeekendBoss()">Check Boss</button></div>
+      <div class="mega-card"><h3>Random Question</h3><p id="questionText"></p><button onclick="generateQuestion()">Generate</button></div>
+      <div class="mega-card"><h3>Parent Analytics</h3><p id="analyticsText"></p><button onclick="showParentAnalytics()">Show Analytics</button></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Reset Tools</h2>
+    <p>Password required. Reset one player or both.</p>
+    <button class="gold" onclick="resetAdventureProgress('Jen')">Reset Jen</button>
+    <button class="gold" onclick="resetAdventureProgress('Jah')">Reset JJ</button>
+    <button class="secondary" onclick="resetAdventureProgress('Both')">Reset Both</button>
+  </section>
+
+  <section class="card">
+    <h2>Approval Center</h2>
+    <p>Picture or video proof is required. EXP is awarded only after approval. Approve or Send Back deletes the item from this list.</p>
+    <div class="nadra-notice" id="nadraNotice">No new submissions yet.</div>
+    <div id="approvalQueue"></div>
+  </section>
+
+  <section class="card">
+    <h2>Family Gradebook</h2>
+    <p>Optional family grade tracker.</p>
+    <div class="two-col"><div><label>Student</label><select id="gradeStudent"><option>Jen</option><option>Jah</option></select></div><div><label>Subject</label><select id="gradeSubject"><option>Math</option><option>Reading</option><option>Writing</option><option>Science</option><option>Design</option></select></div></div>
+    <div class="two-col"><div><label>Assignment</label><input id="assignmentName"></div><div><label>Score</label><input id="assignmentScore" type="number"></div></div>
+    <button onclick="addGrade()">Add Grade</button><button class="secondary" onclick="clearGrades()">Clear Gradebook</button>
+    <table style="width:100%;margin-top:12px;border-collapse:collapse"><thead><tr><th>Student</th><th>Subject</th><th>Assignment</th><th>Score</th><th>Letter</th></tr></thead><tbody id="gradebookBody"></tbody></table>
+  </section>
+
+</main>
+
+<script>
+const NADRA_PASSWORD = "nadra123";
+let activeQuestTimer = null;
+
+
+let musicContext = null;
+let musicTimer = null;
+let musicGain = null;
+
+function playNote(freq,duration,delay){
+  if(!musicContext) musicContext = new (window.AudioContext || window.webkitAudioContext)();
+  if(!musicGain){
+    musicGain = musicContext.createGain();
+    musicGain.gain.value = 0.08;
+    musicGain.connect(musicContext.destination);
+  }
+  const osc = musicContext.createOscillator();
+  osc.type = "triangle";
+  osc.frequency.setValueAtTime(freq, musicContext.currentTime + delay);
+  osc.connect(musicGain);
+  osc.start(musicContext.currentTime + delay);
+  osc.stop(musicContext.currentTime + delay + duration);
+}
+
+function playTheme(type){
+  stopTheme();
+  if(!musicContext) musicContext = new (window.AudioContext || window.webkitAudioContext)();
+
+  const themes = {
+    adventure:[523,659,784,659,698,880,784,659],
+    victory:[659,784,988,1046,988,784,1046,1318],
+    boss:[196,220,196,165,247,220,196,147],
+    calm:[392,440,494,440,392,330,349,392]
+  };
+
+  const notes = themes[type] || themes.adventure;
+
+  function loop(){
+    notes.forEach((n,i)=>playNote(n,0.22,i*0.28));
+  }
+
+  loop();
+  musicTimer = setInterval(loop, notes.length * 280 + 400);
+}
+
+function stopTheme(){
+  if(musicTimer){
+    clearInterval(musicTimer);
+    musicTimer = null;
+  }
+}
+
+
+const dailyQuestBank = {
+  math:[
+    "Complete 10 Khan Academy problems.",
+    "Solve 3 challenge equations.",
+    "Teach someone one math strategy.",
+    "Create your own word problem.",
+    "Beat your best score on Khan Academy."
+  ],
+  science:[
+    "Build a paper airplane and test 3 throws.",
+    "Test what floats and sinks.",
+    "Create a balloon rocket.",
+    "Build the tallest paper tower.",
+    "Watch a science video and explain 3 facts."
+  ],
+  reading:[
+    "Read for 20 minutes and summarize.",
+    "Read a graphic novel chapter.",
+    "Find 5 new vocabulary words.",
+    "Compare two characters.",
+    "Read aloud dramatically."
+  ],
+  design:[
+    "Design a dream castle.",
+    "Create a maze challenge.",
+    "Draw a new boss character.",
+    "Build a LEGO structure.",
+    "Make a Canva poster."
+  ]
+};
+
+function rotateDailyQuests(){
+  const day = new Date().getDate();
+
+  const math = dailyQuestBank.math[day % dailyQuestBank.math.length];
+  const science = dailyQuestBank.science[day % dailyQuestBank.science.length];
+  const reading = dailyQuestBank.reading[day % dailyQuestBank.reading.length];
+  const design = dailyQuestBank.design[day % dailyQuestBank.design.length];
+
+  const targets = document.querySelectorAll(".dynamic-math");
+  targets.forEach(t => t.textContent = math);
+
+  const scienceTargets = document.querySelectorAll(".dynamic-science");
+  scienceTargets.forEach(t => t.textContent = science);
+
+  const readingTargets = document.querySelectorAll(".dynamic-reading");
+  readingTargets.forEach(t => t.textContent = reading);
+
+  const designTargets = document.querySelectorAll(".dynamic-design");
+  designTargets.forEach(t => t.textContent = design);
+}
+
+
+function showToast(message,type){
+  const toast = document.getElementById("toast");
+  if(!toast) return;
+  toast.textContent = message;
+  toast.className = "toast show " + type;
+  setTimeout(()=>{
+    toast.className = "toast " + type;
+  },2500);
+}
+
+function byId(id){return document.getElementById(id)}
+
+function checkNadraPassword(){
+  const entered = prompt("Nadra password required:");
+  if(entered === NADRA_PASSWORD) return true;
+  alert("Incorrect password.");
+  return false;
+}
+
+function switchKid(kidId){
+  const jenPanel = document.getElementById("kid11");
+  const jjPanel = document.getElementById("kid8");
+  const jenTab = document.getElementById("tab-kid11");
+  const jjTab = document.getElementById("tab-kid8");
+
+  if(!jenPanel || !jjPanel) return;
+
+  jenPanel.classList.add("hidden");
+  jjPanel.classList.add("hidden");
+
+  if(jenTab) jenTab.classList.remove("active");
+  if(jjTab) jjTab.classList.remove("active");
+
+  const selectedPanel = document.getElementById(kidId);
+  const selectedTab = document.getElementById("tab-" + kidId);
+
+  if(selectedPanel) selectedPanel.classList.remove("hidden");
+  if(selectedTab) selectedTab.classList.add("active");
+
+  localStorage.setItem("activeKid", kidId);
+  updateCastleLocks();
+}
+
+function getXp(student){return Number(localStorage.getItem("xp-"+student) || 0)}
+function setXp(student,xp){localStorage.setItem("xp-"+student,String(xp))}
+function getLevel(xp){return Math.min(10,Math.floor(Number(xp)/50))}
+function nextXp(level){return level>=10 ? "MAX" : (level+1)*50}
+function studentFromKid(kid){return kid==="kid11" ? "Jen" : "Jah"}
+function kidFromStudent(student){return student==="Jen" ? "kid11" : "kid8"}
+
+function addXp(student,amount){
+  setXp(student,getXp(student)+Number(amount));
+  updateAllXpDisplays();
+  updateCastleLocks();
+}
+
+function difficulty(level){
+  if(level<=0)return "Starter Quests";
+  if(level===1)return "Harder Math";
+  if(level===2)return "Advanced Khan";
+  if(level===3)return "Boss Battles";
+  if(level===4)return "Expert Physics";
+  if(level===5)return "Legendary Mode";
+  if(level===6)return "Master Math";
+  if(level===7)return "Research Quest";
+  if(level===8)return "Design Lab";
+  if(level===9)return "Teach Back Quest";
+  return "Champion Mode";
+}
+
+function updateXpDisplay(kid,student){
+  const xp=getXp(student), level=getLevel(xp), next=nextXp(level);
+  byId("level-"+kid).textContent="Level "+level;
+  byId("xpText-"+kid).textContent= level>=10 ? xp+" EXP MAX" : xp+" / "+next+" EXP";
+  byId("xpBar-"+kid).style.width = level>=10 ? "100%" : Math.min(100,((xp-level*50)/50)*100)+"%";
+  byId("difficulty-"+kid).textContent=difficulty(level);
+}
+function updateAllXpDisplays(){
+  updateXpDisplay("kid11","Jen");
+  updateXpDisplay("kid8","Jah");
+}
+
+function updateCastleLocks(){
+  const activeKid=localStorage.getItem("activeKid")||"kid11";
+  const xp=getXp(studentFromKid(activeKid));
+  const castles=[
+    ["math",0,"Math Castle"],["reading",500,"Reading Castle"],["writing",1000,"Writing Castle"],
+    ["science",1500,"Science Castle"],["puzzle",2000,"Puzzle Castle"],["design",2500,"Design Castle"],["final",3000,"Final Castle"]
+  ];
+  castles.forEach(([id,req,name])=>{
+    const btn=byId("enter-"+id), status=byId(id+"CastleStatus");
+    if(btn){
+      if(xp>=req){btn.textContent=id==="math"?"Start Timer":"Start Timer";btn.classList.remove("locked")}
+      else{btn.textContent="Locked";btn.classList.add("locked")}
+    }
+    if(status){
+      if(xp<req) status.textContent="Locked at "+req+" EXP";
+      else if(id==="math" && xp<500) status.textContent="Open • "+xp+" / 500 EXP";
+      else if(id==="reading" && xp<1000) status.textContent="Open • "+xp+" / 1000 EXP";
+      else if(id==="writing" && xp<1500) status.textContent="Open • "+xp+" / 1500 EXP";
+      else if(id==="science" && xp<2000) status.textContent="Open • "+xp+" / 2000 EXP";
+      else if(id==="puzzle" && xp<2500) status.textContent="Open • "+xp+" / 2500 EXP";
+      else if(id==="design" && xp<3000) status.textContent="Open • "+xp+" / 3000 EXP";
+      else status.textContent=id==="final" ? "Final Castle Ready" : "Complete";
+    }
+  });
+}
+
+function startCastleTimer(castle){
+  const data={
+    math:{req:0,name:"Math Castle",min:15},
+    reading:{req:500,name:"Reading Castle",min:20},
+    writing:{req:1000,name:"Writing Castle",min:20},
+    science:{req:1500,name:"Science Castle",min:15},
+    puzzle:{req:2000,name:"Puzzle Castle",min:15},
+    design:{req:2500,name:"Design Castle",min:20},
+    final:{req:3000,name:"Final Castle",min:30}
+  };
+  const activeKid=localStorage.getItem("activeKid")||"kid11";
+  const xp=getXp(studentFromKid(activeKid));
+  if(xp<data[castle].req){alert(data[castle].name+" is locked.");return}
+  startQuestTimer(data[castle].name,data[castle].min);
+}
+
+function startQuestTimer(title,minutes){
+  clearInterval(activeQuestTimer);
+  let seconds=minutes*60;
+  const panel=byId("questTimerPanel"), titleEl=byId("questTimerTitle"), textEl=byId("questTimerText");
+  panel.classList.remove("hidden");
+  titleEl.textContent=title+" Timer";
+  activeQuestTimer=setInterval(()=>{
+    const mins=Math.floor(seconds/60), secs=String(seconds%60).padStart(2,"0");
+    textEl.textContent=mins+":"+secs+" remaining";
+    if(seconds===60){ alert("Almost there! 1 minute left!"); }
+    if(seconds<=0){
+      clearInterval(activeQuestTimer);
+      textEl.textContent="Time is up! Upload proof and submit.";
+      alert("Time is up! Upload picture or video proof and submit your lesson.");
+    }
+    seconds--;
+  },1000);
+}
+
+function finishTimedQuest(){alert("Upload your picture or video proof beside Submit Lesson, then press Submit Lesson.")}
+function doMoreQuest(){alert("Do more work, add more proof, and Nadra can approve more EXP.")}
+
+function storeProof(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    event.target.dataset.proof=e.target.result;
+    event.target.dataset.filename=file.name;
+  };
+  reader.readAsDataURL(file);
+}
+
+function submitQuest(event,student,questName){
+  event.stopPropagation();
+  const row=event.target.closest(".assignment-item");
+  const upload=row ? row.querySelector(".proof-upload") : null;
+  const proof=upload ? upload.dataset.proof || "" : "";
+  const filename=upload ? upload.dataset.filename || "No file attached" : "No file attached";
+  if(!proof){alert("Please upload a picture or video before submitting.");return}
+  const approvals=JSON.parse(localStorage.getItem("approvalQueue")||"[]");
+  approvals.push({student,questName,points:5,proof,filename,status:"Waiting for Nadra",date:new Date().toLocaleString()});
+  localStorage.setItem("approvalQueue",JSON.stringify(approvals));
+  renderApprovalQueue();
+  byId("nadraNotice").textContent="New submission: "+student+" - "+questName;
+  alert(student+" submitted "+questName+". EXP waits for approval.");
+}
+
+function renderApprovalQueue(){
+  const holder=byId("approvalQueue");
+  const approvals=JSON.parse(localStorage.getItem("approvalQueue")||"[]");
+  holder.innerHTML="";
+  if(!approvals.length){holder.innerHTML="<p>No submissions yet.</p>";return}
+  approvals.forEach((item,index)=>{
+    const card=document.createElement("div");
+    card.className="approval-card";
+    card.innerHTML=`
+      <h3>${item.student}: ${item.questName}</h3>
+      <p><strong>Points:</strong> ${item.points}</p>
+      <p><strong>Submitted:</strong> ${item.date}</p>
+      <p><strong>Picture or Video Proof:</strong></p>
+      <a class="submission-link" href="${item.proof}" target="_blank">Open ${item.filename}</a>
+      <span class="approval-status">${item.status}</span>
+      <div>
+        <button onclick="setApprovalStatus(${index},'Approved by Nadra')">Approve</button>
+        <button class="gold" onclick="setApprovalStatus(${index},'Returned for more work')">Send Back</button>
+      </div>`;
+    holder.appendChild(card);
+  });
+}
+
+function setApprovalStatus(index,status){
+  if(!checkNadraPassword())return;
+  const approvals=JSON.parse(localStorage.getItem("approvalQueue")||"[]");
+  if(!approvals[index])return;
+  const item=approvals[index];
+  if(status==="Approved by Nadra"){
+    addXp(item.student,item.points||5);
+    increaseStreak();
+  }
+  approvals.splice(index,1);
+  localStorage.setItem("approvalQueue",JSON.stringify(approvals));
+  renderApprovalQueue();
+  if(status==="Approved by Nadra"){
+  showToast("Approved! EXP added 🔥","approved");
+}else{
+  showToast("Sent back. Fix it and try again 😭","sentback");
+}
+}
+
+function getCurrentStreak(){return Number(localStorage.getItem("adventureStreak")||0)}
+function updateStreakDisplay(){
+  const s=getCurrentStreak();
+  byId("streakBadge").innerHTML="<strong>"+s+" Day Streak</strong><span>Adventure Power</span>";
+}
+function increaseStreak(){
+  const next=getCurrentStreak()+1;
+  localStorage.setItem("adventureStreak",String(next));
+  updateStreakDisplay();
+  if(next%7===0){addXp("Jen",10);addXp("Jah",10);alert("7 Day Streak Bonus! +10 EXP!")}
+}
+
+function toggleTask(row){const box=row.querySelector("input[type=checkbox]"); if(box){box.checked=!box.checked;saveChecks()}}
+function saveChecks(){
+  const states=Array.from(document.querySelectorAll(".check")).map(c=>c.checked);
+  localStorage.setItem("learningChecks",JSON.stringify(states));
+  updateProgress("kid11");updateProgress("kid8");
+}
+function loadChecks(){
+  const states=JSON.parse(localStorage.getItem("learningChecks")||"[]");
+  document.querySelectorAll(".check").forEach((c,i)=>c.checked=!!states[i]);
+  updateProgress("kid11");updateProgress("kid8");
+}
+function resetChecks(){document.querySelectorAll(".check").forEach(c=>c.checked=false);saveChecks()}
+
+function getProgressNotification(completed,total,xp){
+  const toNext = 50 - (xp % 50);
+  if(completed===0) return "Ready for your first quest!";
+  if(completed===1) return "Great start! Keep going!";
+  if(completed===2) return "Nice work! You are warming up!";
+  if(completed===3) return "Almost there!";
+  if(completed===4) return "One more quest!";
+  if(completed>=total) return "Quest day complete! Submit proof for approval!";
+  if(toNext<=10) return "Almost level up! Only "+toNext+" EXP to go!";
+  return "Keep building your adventure power!";
+}
+
+function updateNotifications(){
+  const jenChecks=Array.from(document.querySelectorAll(".check.kid11"));
+  const jahChecks=Array.from(document.querySelectorAll(".check.kid8"));
+  const jenDone=jenChecks.filter(c=>c.checked).length;
+  const jahDone=jahChecks.filter(c=>c.checked).length;
+  if(byId("notify-kid11")) byId("notify-kid11").textContent=getProgressNotification(jenDone,jenChecks.length||5,getXp("Jen"));
+  if(byId("notify-kid8")) byId("notify-kid8").textContent=getProgressNotification(jahDone,jahChecks.length||5,getXp("Jah"));
+}
+
+
+function updateProgress(kid){
+  const checks=Array.from(document.querySelectorAll(".check."+kid));
+  const completed=checks.filter(c=>c.checked).length,total=checks.length||5;
+  byId("points-"+kid).textContent=completed+"/"+total;
+  byId("dailyQuestPoints-"+kid).textContent=(completed*5)+"/25";
+  byId("progressText-"+kid).textContent=Math.round((completed/total)*100)+"%";
+  byId("progress-"+kid).style.width=Math.round((completed/total)*100)+"%";
+  updateNotifications();
+}
+
+function resetAdventureProgress(target){
+  if(!checkNadraPassword())return;
+  if(!confirm("Reset "+target+"?"))return;
+  if(target==="Jen"||target==="Both"){setXp("Jen",0);document.querySelectorAll(".check.kid11").forEach(c=>c.checked=false)}
+  if(target==="Jah"||target==="Both"){setXp("Jah",0);document.querySelectorAll(".check.kid8").forEach(c=>c.checked=false)}
+  if(target==="Both"){localStorage.removeItem("approvalQueue");localStorage.setItem("adventureStreak","0")}
+  saveChecks();updateAllXpDisplays();updateCastleLocks();updateStreakDisplay();renderApprovalQueue();
+}
+
+function claimReward(){alert("Reward requested: "+byId("rewardChoice").value)}
+function playVictorySound(){
+  const ctx=new (window.AudioContext||window.webkitAudioContext)(), osc=ctx.createOscillator(), gain=ctx.createGain();
+  osc.connect(gain);gain.connect(ctx.destination);gain.gain.value=.12;osc.frequency.value=660;osc.start();osc.stop(ctx.currentTime+.25);
+}
+function toggleDarkMode(){document.body.classList.toggle("dark-mode")}
+function showWeekendBoss(){
+  const day=new Date().getDay();
+  if(day!==0&&day!==6){byId("weekendBossText").textContent="No boss today. Weekend only.";return}
+  const bosses=["Math Dragon: solve 5 challenge problems.","Reading Wizard: compare two characters.","Science Coaster: explain force and speed.","Puzzle Boss: teach one cube move.","Design Boss: create a castle map."];
+  byId("weekendBossText").textContent=bosses[Math.floor(Math.random()*bosses.length)];
+}
+function generateQuestion(){
+  const q=["What was the hardest part?","How can this be one level harder?","Explain your strategy.","Teach this to someone.","Make a real world example."];
+  byId("questionText").textContent=q[Math.floor(Math.random()*q.length)];
+}
+function showParentAnalytics(){
+  const approvals=JSON.parse(localStorage.getItem("approvalQueue")||"[]");
+  byId("analyticsText").textContent="Jen EXP: "+getXp("Jen")+" | JJ EXP: "+getXp("Jah")+" | Streak: "+getCurrentStreak()+" | Waiting: "+approvals.length;
+}
+function getLetterGrade(score){if(score>=90)return"A";if(score>=80)return"B";if(score>=70)return"C";if(score>=60)return"D";return"F"}
+function addGrade(){
+  const grades=JSON.parse(localStorage.getItem("gradebook")||"[]");
+  grades.push({student:byId("gradeStudent").value,subject:byId("gradeSubject").value,assignment:byId("assignmentName").value,score:Number(byId("assignmentScore").value||0)});
+  localStorage.setItem("gradebook",JSON.stringify(grades));renderGrades();
+}
+function renderGrades(){
+  const body=byId("gradebookBody"), grades=JSON.parse(localStorage.getItem("gradebook")||"[]");
+  body.innerHTML="";
+  grades.forEach(g=>{body.innerHTML+=`<tr><td>${g.student}</td><td>${g.subject}</td><td>${g.assignment}</td><td>${g.score}%</td><td>${getLetterGrade(g.score)}</td></tr>`})
+}
+function clearGrades(){localStorage.removeItem("gradebook");renderGrades()}
+
+function initializeDate(){
+  const today=new Date();
+  byId("todayDate").textContent=today.toLocaleDateString(undefined,{month:"short",day:"numeric"});
+  const start=new Date(today.getFullYear(),0,1);
+  byId("dayNumber").textContent=String(Math.floor((today-start)/(1000*60*60*24))+1);
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  initializeDate();
+  document.querySelectorAll(".assignment-item").forEach(row=>row.addEventListener("click",e=>{if(e.target.tagName!=="BUTTON"&&e.target.type!=="file")toggleTask(row)}));
+  loadChecks();
+  updateAllXpDisplays();
+  updateCastleLocks();
+  updateStreakDisplay();
+  renderApprovalQueue();
+  renderGrades();
+  switchKid(localStorage.getItem("activeKid")||"kid11"); rotateDailyQuests();
+});
+</script>
+</body>
+</html>
