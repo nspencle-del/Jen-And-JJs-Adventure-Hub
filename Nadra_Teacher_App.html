@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nadra Teacher App</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;700;900&display=swap');
+:root{--pink:#ff4fb8;--purple:#7c5cff;--gold:#ffd447;--green:#00c781;--ink:#251f3d;--soft:#675b82}
+*{box-sizing:border-box}
+body{margin:0;font-family:Nunito,Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#fff7fc,#eef8ff,#f5edff);min-height:100vh}
+header{text-align:center;padding:28px 16px}
+h1,h2,h3,button{font-family:Bangers,Impact,fantasy;letter-spacing:1.4px}
+h1{font-size:clamp(2.8rem,8vw,5rem);margin:0;color:var(--pink);text-shadow:3px 3px 0 white}
+.container{width:min(1050px,94vw);margin:0 auto 40px}
+.card{background:white;border-radius:24px;padding:20px;margin:18px 0;box-shadow:0 18px 40px rgba(124,92,255,.16);border:2px solid rgba(255,79,184,.15)}
+.card h2{margin:0 0 10px;color:var(--purple);font-size:2rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.stat{background:linear-gradient(135deg,#fff8df,#ffe9f7);border-radius:18px;padding:16px;text-align:center;font-weight:900}
+.stat span{display:block;font-size:2rem;color:var(--pink)}
+button{border:0;border-radius:999px;padding:11px 17px;margin:4px;cursor:pointer;color:white;background:linear-gradient(135deg,var(--pink),var(--purple));font-size:1rem}
+button.gold{background:linear-gradient(135deg,var(--gold),#ff8a3d);color:#2b2209}
+button.green{background:linear-gradient(135deg,var(--green),#00e0c7)}
+button.gray{background:#ddd7e8;color:#665b82}
+input,select,textarea{width:100%;padding:12px;border-radius:14px;border:1px solid #ddd;margin:6px 0 12px;font-size:1rem}
+.approval-card{border:2px dashed rgba(124,92,255,.3);border-radius:18px;padding:14px;margin:12px 0;background:#fffdfb}
+.badge{display:inline-block;border-radius:999px;background:#ffe2f4;color:var(--pink);padding:5px 10px;font-weight:900}
+.link{display:block;word-break:break-word;color:var(--purple);font-weight:900;margin:8px 0}
+.toast{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:var(--purple);color:white;padding:14px 20px;border-radius:18px;box-shadow:0 10px 25px rgba(0,0,0,.18);opacity:0;transition:.3s;z-index:999}
+.toast.show{opacity:1}
+.hidden{display:none!important}
+table{width:100%;border-collapse:collapse;margin-top:12px}
+td,th{border-bottom:1px solid #eee;padding:10px;text-align:left}
+</style>
+</head>
+<body>
+<div id="toast" class="toast">Saved</div>
+<header><h1>Nadra Teacher App</h1><p>Approve lessons, send work back, manage EXP, reset progress, and review proof.</p></header>
+<main class="container">
+<section class="card" id="loginCard">
+<h2>Teacher Login</h2>
+<p>Enter the teacher password to open the control center.</p>
+<input id="teacherPassword" type="password" placeholder="Teacher password">
+<button onclick="teacherLogin()">Open Teacher App</button>
+<button class="gray" onclick="resetTeacherPassword()">Reset Password</button>
+</section>
+<section id="teacherApp" class="hidden">
+<section class="card">
+<h2>Teacher Dashboard</h2>
+<div class="grid">
+<div class="stat">Jen EXP <span id="jenXp">0</span></div>
+<div class="stat">JJ EXP <span id="jahXp">0</span></div>
+<div class="stat">Waiting Approvals <span id="waitingCount">0</span></div>
+<div class="stat">Streak <span id="streakCount">0</span></div>
+</div>
+</section>
+<section class="card">
+<h2>Approval Center</h2>
+<p>Review picture/video proof. Approving gives EXP. Sending back removes it without EXP.</p>
+<div id="approvalQueue"></div>
+</section>
+<section class="card">
+<h2>Manual EXP Control</h2>
+<div class="grid">
+<div><label>Student</label><select id="expStudent"><option>Jen</option><option>Jah</option></select></div>
+<div><label>EXP Amount</label><input id="expAmount" type="number" value="5"></div>
+</div>
+<button class="green" onclick="addManualExp()">Add EXP</button>
+<button class="gold" onclick="removeManualExp()">Remove EXP</button>
+</section>
+<section class="card">
+<h2>Reset Controls</h2>
+<button class="gold" onclick="resetStudent('Jen')">Reset Jen</button>
+<button class="gold" onclick="resetStudent('Jah')">Reset JJ</button>
+<button class="gray" onclick="resetStudent('Both')">Reset Both</button>
+</section>
+<section class="card">
+<h2>Gradebook</h2>
+<div class="grid">
+<div><label>Student</label><select id="gradeStudent"><option>Jen</option><option>Jah</option></select></div>
+<div><label>Subject</label><select id="gradeSubject"><option>Math</option><option>Reading</option><option>Writing</option><option>Science</option><option>Design</option></select></div>
+</div>
+<label>Assignment</label><input id="assignmentName" placeholder="Assignment name">
+<label>Score</label><input id="assignmentScore" type="number" placeholder="Score">
+<button onclick="addGrade()">Add Grade</button><button class="gray" onclick="clearGrades()">Clear Gradebook</button>
+<table><thead><tr><th>Student</th><th>Subject</th><th>Assignment</th><th>Score</th><th>Letter</th></tr></thead><tbody id="gradebookBody"></tbody></table>
+</section>
+<section class="card">
+<h2>Password Manager</h2>
+<p>Nadra can change the teacher password here.</p>
+<input id="newPassword" type="password" placeholder="New teacher password">
+<button onclick="changePassword()">Change Password</button>
+</section>
+</section>
+</main>
+<script>
+const DEFAULT_PASSWORD="nadra123";
+function byId(id){return document.getElementById(id)}
+function getPassword(){return localStorage.getItem("teacherPassword")||DEFAULT_PASSWORD}
+function toast(msg){const t=byId("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
+function teacherLogin(){if(byId("teacherPassword").value===getPassword()){byId("loginCard").classList.add("hidden");byId("teacherApp").classList.remove("hidden");refreshTeacherApp();toast("Teacher app opened")}else alert("Incorrect password.")}
+function resetTeacherPassword(){if(confirm("Reset teacher password back to starter password?")){localStorage.setItem("teacherPassword",DEFAULT_PASSWORD);toast("Password reset")}}
+function changePassword(){const next=byId("newPassword").value.trim();if(next.length<4){alert("Use at least 4 characters.");return}localStorage.setItem("teacherPassword",next);byId("newPassword").value="";toast("Teacher password changed")}
+function getXp(student){return Number(localStorage.getItem("xp-"+student)||0)}
+function setXp(student,xp){localStorage.setItem("xp-"+student,String(Math.max(0,Number(xp))))}
+function refreshTeacherApp(){const approvals=JSON.parse(localStorage.getItem("approvalQueue")||"[]");byId("jenXp").textContent=getXp("Jen");byId("jahXp").textContent=getXp("Jah");byId("waitingCount").textContent=approvals.length;byId("streakCount").textContent=Number(localStorage.getItem("adventureStreak")||0);renderApprovals();renderGrades()}
+function renderApprovals(){const holder=byId("approvalQueue");const approvals=JSON.parse(localStorage.getItem("approvalQueue")||"[]");holder.innerHTML="";if(!approvals.length){holder.innerHTML="<p>No lessons waiting for review.</p>";return}approvals.forEach((item,index)=>{const card=document.createElement("div");card.className="approval-card";card.innerHTML=`<h3>${item.student}: ${item.questName}</h3><p><span class="badge">${item.points||5} EXP</span></p><p><strong>Submitted:</strong> ${item.date||"No date"}</p><p><strong>Proof:</strong></p>${item.proof?`<a class="link" href="${item.proof}" target="_blank">Open ${item.filename||"proof"}</a>`:`<p>No proof attached</p>`}<button class="green" onclick="approveLesson(${index})">Approve</button><button class="gold" onclick="sendBackLesson(${index})">Send Back</button>`;holder.appendChild(card)})}
+function approveLesson(index){const approvals=JSON.parse(localStorage.getItem("approvalQueue")||"[]");if(!approvals[index])return;const item=approvals[index];setXp(item.student,getXp(item.student)+(item.points||5));approvals.splice(index,1);localStorage.setItem("approvalQueue",JSON.stringify(approvals));toast("Approved. EXP added.");refreshTeacherApp()}
+function sendBackLesson(index){const approvals=JSON.parse(localStorage.getItem("approvalQueue")||"[]");if(!approvals[index])return;approvals.splice(index,1);localStorage.setItem("approvalQueue",JSON.stringify(approvals));toast("Sent back. No EXP added.");refreshTeacherApp()}
+function addManualExp(){const s=byId("expStudent").value;const a=Number(byId("expAmount").value||0);setXp(s,getXp(s)+a);toast("EXP added");refreshTeacherApp()}
+function removeManualExp(){const s=byId("expStudent").value;const a=Number(byId("expAmount").value||0);setXp(s,getXp(s)-a);toast("EXP removed");refreshTeacherApp()}
+function resetStudent(target){if(!confirm("Reset progress for "+target+"?"))return;if(target==="Jen"||target==="Both")setXp("Jen",0);if(target==="Jah"||target==="Both")setXp("Jah",0);if(target==="Both"){localStorage.removeItem("approvalQueue");localStorage.setItem("adventureStreak","0")}toast(target+" reset");refreshTeacherApp()}
+function letter(score){if(score>=90)return"A";if(score>=80)return"B";if(score>=70)return"C";if(score>=60)return"D";return"F"}
+function addGrade(){const grades=JSON.parse(localStorage.getItem("gradebook")||"[]");grades.push({student:byId("gradeStudent").value,subject:byId("gradeSubject").value,assignment:byId("assignmentName").value,score:Number(byId("assignmentScore").value||0)});localStorage.setItem("gradebook",JSON.stringify(grades));byId("assignmentName").value="";byId("assignmentScore").value="";renderGrades();toast("Grade added")}
+function renderGrades(){const body=byId("gradebookBody");const grades=JSON.parse(localStorage.getItem("gradebook")||"[]");body.innerHTML="";grades.forEach(g=>body.innerHTML+=`<tr><td>${g.student}</td><td>${g.subject}</td><td>${g.assignment}</td><td>${g.score}%</td><td>${letter(g.score)}</td></tr>`)}
+function clearGrades(){if(confirm("Clear gradebook?")){localStorage.removeItem("gradebook");renderGrades();toast("Gradebook cleared")}}
+window.addEventListener("storage",refreshTeacherApp);
+</script>
+</body>
+</html>
